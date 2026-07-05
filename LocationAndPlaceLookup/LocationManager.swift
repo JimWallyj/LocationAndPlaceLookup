@@ -15,6 +15,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate{
     //  *** CRITICALLY IMPORTANT *** Always add info.plist message for Privacy - Location When in Use Usage Description
     
     var location: CLLocation?
+    var placemark: CLPlacemark?
     private let locationManager = CLLocationManager()
     var authorizationStatus: CLAuthorizationStatus = .notDetermined
     var errorMessage: String?
@@ -25,6 +26,17 @@ class LocationManager: NSObject, CLLocationManagerDelegate{
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+    }
+    
+    //  Get a region around current location with specified radius in meters
+    func getRegionAroundCurrentLocation(radiusInMeters: CLLocationDistance = 10000) -> MKCoordinateRegion? {
+        guard let location else { return nil }
+        
+        return MKCoordinateRegion(
+            center: location.coordinate,
+            latitudinalMeters: radiusInMeters,
+            longitudinalMeters: radiusInMeters
+        )
     }
 }
 
